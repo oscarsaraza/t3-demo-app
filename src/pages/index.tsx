@@ -12,7 +12,19 @@ function formatDateTime(date: Date) {
   });
 }
 
-function PostEntry({ post }: { post: any }) {
+type Post = {
+  name: string;
+  createdAt: Date;
+};
+
+/**
+ * Renders a post entry.
+ * 
+ * @param {Object} props - The component props.
+ * @param {Post} props.post - The post object.
+ * @returns {JSX.Element} - The rendered post entry.
+ */
+function PostEntry({ post }: { post: Post }): JSX.Element {
   return (
     <div>
       <span>{post.name}</span>{' '}
