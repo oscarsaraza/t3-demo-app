@@ -1,8 +1,7 @@
 import { SignInButton, SignOutButton, useUser } from "@clerk/nextjs";
 import Head from "next/head";
 import Image from "next/image";
-
-import { api } from "~/utils/api";
+import { RouterOutputs, api } from "~/utils/api";
 
 function formatDateTime(date: Date) {
   return date.toLocaleString("es-CO", {
@@ -13,19 +12,15 @@ function formatDateTime(date: Date) {
   });
 }
 
-type Post = {
-  id: number;
-  name: string;
-  createdAt: Date;
-};
+type Post = RouterOutputs["post"]["getAll"][number];
 
 /**
  * Render a list of posts.
  *
- * @param {Array<Post>} posts - The array of posts to render.
- * @return {JSX.Element} The rendered list of posts.
+ * @param posts The array of posts to render.
+ * @return The rendered list of posts.
  */
-function PostsList({ posts }: { posts: Array<Post> }) {
+function PostsList({ posts }: { posts: Post[] }): JSX.Element {
   return (
     <p className="text-2xl text-white">
       {posts.map((post) => (
@@ -38,9 +33,8 @@ function PostsList({ posts }: { posts: Array<Post> }) {
 /**
  * Renders a post entry.
  *
- * @param {Object} props - The component props.
- * @param {Post} props.post - The post object.
- * @returns {JSX.Element} - The rendered post entry.
+ * @param post The post object.
+ * @returns The rendered post entry.
  */
 function PostEntry({ post }: { post: Post }): JSX.Element {
   return (
