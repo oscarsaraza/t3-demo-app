@@ -3,8 +3,26 @@ import Head from "next/head";
 
 import { api } from "~/utils/api";
 
+function formatDateTime(date: Date) {
+  return date.toLocaleString("es-CO", {
+    timeZone: "UTC",
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
+}
+
+function PostEntry({ post }: { post: any }) {
+  return (
+    <div>
+      <span>{post.name}</span>{' '}
+      <span className="text-sm text-gray-500">{formatDateTime(post.createdAt)}</span>
+    </div>
+  );
+}
+
 export default function Home() {
-  const hello = api.post.hello.useQuery({ text: "from tRPC" });
+  const { data } = api.post.getAll.useQuery();
   const user = useUser();
 
   return (
@@ -19,7 +37,9 @@ export default function Home() {
           {!user.isSignedIn && <SignInButton />}
           {user.isSignedIn && <SignOutButton />}
           <p className="text-2xl text-white">
-            {hello.data ? hello.data.greeting : "Loading tRPC query..."}
+            {data
+              ? data.map((post) => <PostEntry key={post.id} post={post} />)
+              : "..."}
           </p>
         </div>
       </main>
